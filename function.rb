@@ -36,7 +36,7 @@ def handleTokenPath(body)
       body: '',
       statusCode: 405
     }
-  elsif body["headers"]["content-type"] != "application/json" 
+  elsif body["headers"]["content-type"].downcase != "application/json" 
     return {
       body: '',
       statusCode: 415
