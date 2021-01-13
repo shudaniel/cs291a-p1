@@ -8,7 +8,6 @@ def main(event:, context:)
   # You shouldn't need to use context, but its fields are explained here:
   # https://docs.aws.amazon.com/lambda/latest/dg/ruby-context.html
   
-  event.transform_keys(&:downcase)
   response(body: event, status: 200)
 end
 
@@ -20,7 +19,7 @@ def valid_json?(json)
 end
 
 def handleRootPath(body)
-  if body["httpmethod"] != "GET"
+  if body["httpMethod"] != "GET"
     return {
       body: '',
       statusCode: 405
@@ -31,12 +30,16 @@ def handleRootPath(body)
 end
 
 def handleTokenPath(body)
-  if body["httpmethod"] != "POST"
+  
+  if body["httpMethod"] != "POST"
     return {
       body: '',
       statusCode: 405
     }
-  elsif body["headers"]["content-type"].downcase != "application/json" 
+  end
+  
+  headers_cpy = body["headers"].transform_keys(&:downcase)
+  if headers_cpy["content-type"] != "application/json" 
     return {
       body: '',
       statusCode: 415
