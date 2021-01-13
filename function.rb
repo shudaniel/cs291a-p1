@@ -46,7 +46,7 @@ def handleTokenPath(body)
       statusCode: 422
     }
   end
-  token = JWT.encode payload, ENV['JWT_SECRET'], 'HS256'
+  token = JWT.encode body["body"], ENV['JWT_SECRET'], 'HS256'
   {
     body: {"token": token},
     statusCode: 201
@@ -55,7 +55,7 @@ def handleTokenPath(body)
 end
 
 def response(body: nil, status: 200)
-  if not body or (body["path"] != "/" and body["path"] != "/token") do 
+  if not body or (body["path"] != "/" and body["path"] != "/token") 
     {
       body: '',
       statusCode: 404
