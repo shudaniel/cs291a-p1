@@ -11,7 +11,8 @@ def main(event:, context:)
   # Convert all the keys to lowercase
   lowercase_event = {}
   event.each do |k|
-    lowercase_event[k.downcase] = event[k]
+    puts k
+    #lowercase_event[k.downcase] = event[k]
   end
 
   response(body: lowercase_event, status: 200)
