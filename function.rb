@@ -8,14 +8,8 @@ def main(event:, context:)
   # You shouldn't need to use context, but its fields are explained here:
   # https://docs.aws.amazon.com/lambda/latest/dg/ruby-context.html
   
-  # Convert all the keys to lowercase
-  lowercase_event = {}
-  event.each do |k|
-    puts k
-    #lowercase_event[k.downcase] = event[k]
-  end
-
-  response(body: lowercase_event, status: 200)
+  event.transform_keys(&:downcase)
+  response(body: event, status: 200)
 end
 
 def valid_json?(json)
