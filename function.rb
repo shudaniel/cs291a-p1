@@ -7,8 +7,14 @@ require 'pp'
 def main(event:, context:)
   # You shouldn't need to use context, but its fields are explained here:
   # https://docs.aws.amazon.com/lambda/latest/dg/ruby-context.html
+  
+  # Convert all the keys to lowercase
+  lowercase_event = {}
+  event.each do |k|
+    lowercase_event[k.downcase] = event[k]
+  end
 
-  response(body: event, status: 200)
+  response(body: lowercase_event, status: 200)
 end
 
 def valid_json?(json)
@@ -19,7 +25,7 @@ def valid_json?(json)
 end
 
 def handleRootPath(body)
-  if body["httpMethod"] != "GET"
+  if body["httpmethod"] != "GET"
     return {
       body: '',
       statusCode: 405
@@ -30,12 +36,12 @@ def handleRootPath(body)
 end
 
 def handleTokenPath(body)
-  if body["httpMethod"] != "POST"
+  if body["httpmethod"] != "POST"
     return {
       body: '',
       statusCode: 405
     }
-  elsif body["headers"]["Content-Type"] != "application/json" and  body["headers"]["content-type"] != "application/json"
+  elsif body["headers"]["content-type"] != "application/json" 
     return {
       body: '',
       statusCode: 415
