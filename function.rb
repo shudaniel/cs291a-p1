@@ -44,7 +44,7 @@ def handleTokenPath(body)
       body: '',
       statusCode: 415
     }
-  elsif not body or not body["body"] or not valid_json?(body["body"])
+  elsif not body or not body["body"] or not valid_json?(body["body"].to_s)
     return {
       body: '',
       statusCode: 422
