@@ -81,6 +81,8 @@ def handleTokenPath(body)
     }
   end
 
+  puts "PAYLOAD"
+  puts body["body"]
   payload = {
     data: body["body"],
     exp: Time.now.to_i + 5,
