@@ -65,9 +65,9 @@ def handleTokenPath(body)
     }
   end
   
-  headers_cpy = body["headers"].transform_keys(&:downcase)
-  puts headers_cpy
-  if not headers_cpy or headers_cpy["content-type"] != "application/json" 
+  # headers_cpy = body["headers"].transform_keys(&:downcase)
+  # if not body or not body["headers"] not headers_cpy or headers_cpy["content-type"] != "application/json" 
+  if not body or not body["headers"] or not body["headers"]["content-type"] != "application/json" 
     return {
       body: '',
       statusCode: 415
