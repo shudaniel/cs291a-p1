@@ -50,7 +50,7 @@ def handleRootPath(body)
         statusCode: 401
       }
   
-  rescue JWT::VerificationError => e
+  rescue JWT::VerificationError, JWT::DecodeError => e
     return {
       body: '',
       statusCode: 403
