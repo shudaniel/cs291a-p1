@@ -40,7 +40,7 @@ def handleRootPath(body)
   
   expire = decoded_token[0]['exp']
   nbf = decoded_token[0]['nbf']
-  nowtime = Time.now
+  nowtime = Time.now.to_i
   if nowtime < nbf or nowtime > expire
     return {
       body: '',
