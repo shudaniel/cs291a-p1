@@ -46,7 +46,7 @@ def handleTokenPath(body)
       body: '',
       statusCode: 415
     }
-  elsif not body or not body["body"] or not valid_json?(body["body"].to_s)
+  elsif not body or not valid_json?(body)
     return {
       body: '',
       statusCode: 422
@@ -54,7 +54,7 @@ def handleTokenPath(body)
   end
 
   payload = {
-    data: body["body"],
+    data: body,
     exp: Time.now.to_i + 5,
     nbf: Time.now.to_i + 2
   }
