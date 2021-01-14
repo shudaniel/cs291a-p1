@@ -85,7 +85,7 @@ def handleTokenPath(body)
   end
   
   payload = {
-    data: body["body"].to_s,
+    data: JSON.parse(body["body"]),
     exp: Time.now.to_i + 5,
     nbf: Time.now.to_i + 2
   }
@@ -93,7 +93,7 @@ def handleTokenPath(body)
   token = JWT.encode payload, ENV['JWT_SECRET'], 'HS256'
 
   return {
-    body: {"token": token}.to_json,
+    body: JSON.generate({"token": token}),
     statusCode: 201
   }
 
