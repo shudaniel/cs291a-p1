@@ -36,7 +36,18 @@ def handleRootPath(body)
   end
 
   token = body["headers"]["Authorization"].split(' ')[1]
-  decoded_token = JWT.decode token, ENV['JWT_SECRET'], true, { algorithm: 'HS256' } 
+  decoded_token = JWT.decode token, ENV['JWT_SECRET'], true, { algorithm: 'HS256' }
+  
+  expire = decoded_token[0]['exp']
+  nbf = decoded_token[0]['nbf']
+  nowtime = Time.now
+  if nowtime < nbf or nowtime > expire
+    return {
+      body: '',
+      statusCode: 401
+    }
+  end
+
   {
     body: decoded_token[0]["data"],
     statusCode: 200
