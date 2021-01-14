@@ -27,7 +27,21 @@ def handleRootPath(body)
       statusCode: 405
     }
   end
+  regex = /^Bearer \w+$/
+  if not body["Authentication"] or not body["Authentication"].match(regex)
+    return {
+      body: '',
+      statusCode: 403
+    }
+  end
 
+  token = body["Authentication"].split(' ')[1]
+  decoded_token = JWT.decode token, ENV['JWT_SECRET'], true, { algorithm: 'HS256' }
+
+  {
+    body: decoded_token.data
+    statusCode: 200
+  }
 
 
 end
@@ -48,7 +62,7 @@ def handleTokenPath(body)
       statusCode: 415
     }
   end
-  
+
   if not body or not body["body"] or not valid_json?(body["body"])
     return {
       body: '',
