@@ -28,7 +28,8 @@ def handleRootPath(body)
     }
   end
   regex = /^Bearer \S+$/
-  if not body["headers"]["Authorization"] or not body["headers"]["Authorization"].match(regex)
+  headers_cpy = body["headers"].transform_keys(&:downcase)
+  if not headers_cpy["authorization"] or not headers_cpy["authorization"].match(regex)
     return {
       body: '',
       statusCode: 403
@@ -48,6 +49,12 @@ def handleRootPath(body)
         body: '',
         statusCode: 401
       }
+  
+  rescue JWT::VerificationError => e
+    return {
+      body: '',
+      statusCode: 403
+    }
   end
 
 
