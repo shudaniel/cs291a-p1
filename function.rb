@@ -41,7 +41,7 @@ def handleRootPath(body)
     decoded_token = JWT.decode token, ENV['JWT_SECRET'], true, { algorithm: 'HS256' }
   
     {
-      body: decoded_token[0]["data"],
+      body: JSON.parse(decoded_token[0]["data"]),
       statusCode: 200
     }
   rescue JWT::ExpiredSignature, JWT::ImmatureSignature => e
@@ -70,7 +70,6 @@ def handleTokenPath(body)
   end
   
   headers_cpy = body["headers"].transform_keys(&:downcase)
-  puts headers_cpy
   if not headers_cpy or headers_cpy["content-type"] != "application/json" 
     return {
       body: '',
@@ -84,9 +83,6 @@ def handleTokenPath(body)
       statusCode: 422
     }
   end
-
-  puts "PAYLOAD"
-  puts body["body"]
   
   payload = {
     data: body["body"],
@@ -113,13 +109,7 @@ def response(body: nil, status: 200)
     return handleRootPath(body)
   else
     
-    result = handleTokenPath(body)
-    puts result
-    return result
-    # {
-    #   body: body ? body.to_json + "\n" : '',
-    #   statusCode: status
-    # }
+    return handleTokenPath(body)
   end
 end
 
