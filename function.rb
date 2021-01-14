@@ -41,7 +41,7 @@ def handleRootPath(body)
     decoded_token = JWT.decode token, ENV['JWT_SECRET'], true, { algorithm: 'HS256' }
   
     {
-      body: decoded_token[0]["data"],
+      body: JSON.generate(decoded_token[0]["data"]),
       statusCode: 200
     }
   rescue JWT::ExpiredSignature, JWT::ImmatureSignature => e
