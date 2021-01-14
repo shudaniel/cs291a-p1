@@ -39,7 +39,7 @@ def handleRootPath(body)
   decoded_token = JWT.decode token, ENV['JWT_SECRET'], true, { algorithm: 'HS256' }
 
   {
-    body: decoded_token.data
+    body: decoded_token.data,
     statusCode: 200
   }
 
