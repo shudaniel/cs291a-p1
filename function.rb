@@ -29,6 +29,7 @@ def handleRootPath(body)
   end
 
 
+
 end
 
 def handleTokenPath(body)
@@ -46,7 +47,9 @@ def handleTokenPath(body)
       body: '',
       statusCode: 415
     }
-  elsif not body or not body["body"] or not valid_json?(body["body"].to_s)
+  end
+  
+  if not body or not body["body"] or not valid_json?(body["body"])
     return {
       body: '',
       statusCode: 422
