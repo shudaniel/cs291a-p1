@@ -35,23 +35,20 @@ def handleRootPath(body)
     }
   end
 
-  token = body["headers"]["Authorization"].split(' ')[1]
-  decoded_token = JWT.decode token, ENV['JWT_SECRET'], true, { algorithm: 'HS256' }
+  begin
+    token = body["headers"]["Authorization"].split(' ')[1]
+    decoded_token = JWT.decode token, ENV['JWT_SECRET'], true, { algorithm: 'HS256' }
   
-  expire = decoded_token[0]['exp']
-  nbf = decoded_token[0]['nbf']
-  nowtime = Time.now.to_i
-  if nowtime < nbf or nowtime > expire
-    return {
-      body: '',
-      statusCode: 401
+    {
+      body: decoded_token[0]["data"],
+      statusCode: 200
     }
+  rescue JWT::ExpiredSignature, JWT::ImmatureSignature => e
+    return {
+        body: '',
+        statusCode: 401
+      }
   end
-
-  {
-    body: decoded_token[0]["data"],
-    statusCode: 200
-  }
 
 
 end
@@ -83,6 +80,7 @@ def handleTokenPath(body)
 
   puts "PAYLOAD"
   puts body["body"]
+  
   payload = {
     data: body["body"],
     exp: Time.now.to_i + 5,
@@ -90,7 +88,8 @@ def handleTokenPath(body)
   }
 
   token = JWT.encode payload, ENV['JWT_SECRET'], 'HS256'
-  {
+
+  return {
     body: {"token": token},
     statusCode: 201
   }
@@ -106,6 +105,7 @@ def response(body: nil, status: 200)
   elsif body["path"] == "/"
     return handleRootPath(body)
   else
+    
     return handleTokenPath(body)
     # {
     #   body: body ? body.to_json + "\n" : '',
