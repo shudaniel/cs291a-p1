@@ -97,7 +97,7 @@ def handleTokenPath(body)
   token = JWT.encode payload, ENV['JWT_SECRET'], 'HS256'
 
   return {
-    body: {"token": token},
+    body: {"token": token}.to_json,
     statusCode: 201
   }
 
@@ -113,7 +113,9 @@ def response(body: nil, status: 200)
     return handleRootPath(body)
   else
     
-    return handleTokenPath(body)
+    result = handleTokenPath(body)
+    puts result
+    return result
     # {
     #   body: body ? body.to_json + "\n" : '',
     #   statusCode: status
